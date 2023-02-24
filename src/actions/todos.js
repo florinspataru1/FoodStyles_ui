@@ -1,4 +1,4 @@
-import {CREATE_TODO, DELETE_TODO, RETRIEVE_TODOS, UPDATE_TODO,} from "./types";
+import {COMPLETED_TODOS, CREATE_TODO, DELETE_TODO, RETRIEVE_TODOS, UNCOMPLETED_TODOS, UPDATE_TODO} from "./types";
 
 import TodoDataService from "../services/TodoService";
 
@@ -60,6 +60,32 @@ export const deleteTodo = (id) => async (dispatch) => {
         console.log(err);
     }
 };
+
+export const findTodosCompleted = () => async (dispatch) => {
+    try {
+        const res = await TodoDataService.getCompleted();
+
+        dispatch({
+            type: COMPLETED_TODOS,
+            payload: res.data,
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+export const findTodosUnCompleted = () => async (dispatch) => {
+    try {
+        const res = await TodoDataService.getUnCompleted();
+
+        dispatch({
+            type: UNCOMPLETED_TODOS,
+            payload: res.data,
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 export const findTodosByTitle = (title) => async (dispatch) => {
     try {

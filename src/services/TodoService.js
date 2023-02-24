@@ -4,6 +4,14 @@ const getAll = () => {
     return http.get("/todos/listTodos");
 };
 
+const getCompleted = () => {
+    return http.get("/todos/completed");
+};
+
+const getUnCompleted = () => {
+    return http.get("/todos/uncompleted");
+};
+
 const get = id => {
     return http.get(`/todos/${id}`);
 };
@@ -30,6 +38,8 @@ const findByTitle = title => {
 
 const TodoService = {
     getAll,
+    getCompleted,
+    getUnCompleted,
     get,
     create,
     markCompleted,

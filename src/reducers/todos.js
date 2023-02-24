@@ -1,4 +1,11 @@
-import {CREATE_TODO, DELETE_TODO, RETRIEVE_TODOS, UPDATE_TODO,} from "../actions/types";
+import {
+    COMPLETED_TODOS,
+    CREATE_TODO,
+    DELETE_TODO,
+    RETRIEVE_TODOS,
+    UNCOMPLETED_TODOS,
+    UPDATE_TODO
+} from "../actions/types";
 
 const initialState = [];
 
@@ -23,6 +30,12 @@ const todoReducer = (todos = initialState, action) => {
                     return todo;
                 }
             });
+
+        case COMPLETED_TODOS:
+            return payload;
+
+        case UNCOMPLETED_TODOS:
+            return payload;
 
         case DELETE_TODO:
             return todos.filter(({id}) => id !== payload.id);

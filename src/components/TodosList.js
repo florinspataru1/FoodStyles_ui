@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {retrieveTodos, updateTodo} from "../actions/todos";
+import {deleteTodo, findTodosCompleted, findTodosUnCompleted, retrieveTodos, updateTodo} from "../actions/todos";
 import AddTodo from "./AddTodo";
 
 
@@ -17,6 +17,27 @@ const TodosList = () => {
         dispatch(updateTodo(todo.id, status));
     };
 
+    const deleteItem = (todo) => {
+        if (window.confirm(`Are you sure you want to delete "${todo.title}"?`)) {
+            dispatch(deleteTodo(todo.id));
+        }
+    };
+
+    const filterTodos = (type) => {
+        setActiveButton(type);
+        switch (type) {
+            case 'Completed':
+                return dispatch(findTodosCompleted());
+
+            case 'Incompleted':
+                return dispatch(findTodosUnCompleted());
+
+            case 'All':
+            default:
+                return dispatch(retrieveTodos());
+        }
+    }
+
     return (
         <div className="container-todo-list">
             <div className="container-list">
@@ -29,7 +50,7 @@ const TodosList = () => {
                                 height="32"
                                 viewBox="0 0 40 32"
                             >
-                                <g fill="none" fill-rule="evenodd">
+                                <g fill="none" fillRule="evenodd">
                                     <path
                                         fill="#4A4AE5"
                                         d="M2.577 10.006L13.998 10.013 14.005 21.638 2.584 21.631z"
@@ -49,14 +70,17 @@ const TodosList = () => {
                             <ul className="list-group">
                                 {todos &&
                                     todos.map((todo, index) => (
-                                        <li className={"list-group-item "} key={index}>
+                                        <li className={"list-group-item "} key={todo.id}>
                                             <input
                                                 type={"checkbox"}
                                                 checked={todo.completed}
                                                 onChange={(ev) => toggleTodo(todo, ev.target.checked)}
                                             />
                                             {todo.title}
-                                            <button className="delete-button">
+                                            <button
+                                                onClick={() => deleteItem(todo)}
+                                                className="delete-button"
+                                            >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     width="11"
@@ -65,7 +89,7 @@ const TodosList = () => {
                                                 >
                                                     <path
                                                         fill="#BFBFBF"
-                                                        fill-rule="evenodd"
+                                                        fillRule="evenodd"
                                                         d="M10.68.32c-.426-.426-1.116-.426-1.542 0L5.545 3.912 1.953.32C1.525-.094.845-.088.423.333c-.42.42-.426 1.101-.012 1.53l3.592 3.592L.41 9.047c-.284.274-.398.68-.298 1.06.1.382.398.68.78.78.38.1.786-.014 1.06-.298l3.592-3.592 3.593 3.592c.428.414 1.108.408 1.53-.013.42-.42.426-1.101.012-1.53L7.088 5.456l3.592-3.593c.426-.426.426-1.116 0-1.542z"
                                                     />
                                                 </svg>
@@ -78,19 +102,19 @@ const TodosList = () => {
                             <p className="filter-description">Show:</p>
                             <button
                                 className={`filter-button ${activeButton === 'All' ? 'active' : 'not-active'}`}
-                                onClick={() => setActiveButton('All')}
+                                onClick={() => filterTodos('All')}
                             >
                                 All
                             </button>
                             <button
                                 className={`filter-button ${activeButton === 'Completed' ? 'active' : 'not-active'}`}
-                                onClick={() => setActiveButton('Completed')}
+                                onClick={() => filterTodos('Completed')}
                             >
                                 Completed
                             </button>
                             <button
                                 className={`filter-button ${activeButton === 'Incompleted' ? 'active' : 'not-active'}`}
-                                onClick={() => setActiveButton('Incompleted')}
+                                onClick={() => filterTodos('Incompleted')}
                             >
                                 Incompleted
                             </button>
